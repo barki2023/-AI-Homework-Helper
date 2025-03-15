@@ -1,24 +1,30 @@
 import streamlit as st
 import openai
-import os
-from dotenv import load_dotenv
 
-# Load API Key
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Set your OpenAI API key
+openai.api_key = "YOUR_OPENAI_API_KEY"
 
-st.title("AI Homework Helper 📚🤖")
+# Streamlit UI
+st.title("AI Homework Helper 📚")
 
+st.write("Choose a subject:")
 subject = st.selectbox("Choose a subject:", ["Math", "Science", "History", "English"])
-question = st.text_area("Enter your homework question:")
+
+st.write("Enter your homework question:")
+user_input = st.text_area("Enter your homework question:")
 
 if st.button("Get Answer"):
-    if question.strip() == "":
-        st.warning("Please enter a question!")
+    if user_input.strip() == "":
+        st.warning("Please enter a question.")
     else:
-        with st.spinner("Thinking... 🤔"):
+        try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": f"Answer this {subject} question: {question}"}]
+                model="gpt-3.5-turbo",  # Use the latest available model
+                messages=[{"role": "system", "content": "You are a helpful AI tutor."},
+                          {"role": "user", "content": f"Subject: {subject}\nQuestion: {user_input}"}]
             )
-            st.success(response["choices"][0]["message"]["content"])
+            answer = response["choices"][0]["message"]["content"]
+            st.success("Answer:")
+            st.write(answer)
+        except Exception as e:
+            st.error(f"An error occurred: {str(e)}")
