@@ -7,8 +7,8 @@ openai_client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Function to get AI response
 def get_answer(question):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = openai_client.chat.completions.create(
+            model="gpt-4",  # Change to "gpt-3.5-turbo" if needed
             messages=[{"role": "user", "content": question}]
         )
         return response.choices[0].message.content
