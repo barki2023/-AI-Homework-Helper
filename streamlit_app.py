@@ -1,30 +1,39 @@
 import streamlit as st
 import openai
+import os
 
-# Set your OpenAI API key
-openai.api_key = "YOUR_OPENAI_API_KEY"
+# Load OpenAI API key from Streamlit secrets or environment variable
+openai.api_key = st.secrets["openai"]["api_key"] if "openai" in st.secrets else os.getenv("OPENAI_API_KEY")
 
-# Streamlit UI
+# Streamlit app title
 st.title("AI Homework Helper 📚")
 
-st.write("Choose a subject:")
+# Dropdown for subject selection
 subject = st.selectbox("Choose a subject:", ["Math", "Science", "History", "English"])
 
-st.write("Enter your homework question:")
-user_input = st.text_area("Enter your homework question:")
+# Input field for user question
+question = st.text_area("Enter your homework question:")
 
+# Button to get AI-generated answer
 if st.button("Get Answer"):
-    if user_input.strip() == "":
-        st.warning("Please enter a question.")
+    if not question.strip():
+        st.warning("Please enter a valid question.")
+    elif not openai.api_key:
+        st.error("API key is missing. Please configure it in Streamlit secrets or as an environment variable.")
     else:
         try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # Use the latest available model
-                messages=[{"role": "system", "content": "You are a helpful AI tutor."},
-                          {"role": "user", "content": f"Subject: {subject}\nQuestion: {user_input}"}]
+            # Use the updated OpenAI API method
+            client = openai.OpenAI()
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": f"Subject: {subject}\nQuestion: {question}"}]
             )
-            answer = response["choices"][0]["message"]["content"]
-            st.success("Answer:")
+            
+            # Display the AI-generated answer
+            answer = response.choices[0].message.content
+            st.success("Here’s the answer:")
             st.write(answer)
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
+
+        except openai.OpenAIError as e:
+            st.error(f"Error: {e}")
+
