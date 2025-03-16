@@ -1,17 +1,17 @@
 import streamlit as st
 import openai
 
-# Load API key from Streamlit secrets
-openai_client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Set API Key directly
+openai.api_key = "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"
 
 # Function to get AI response
 def get_answer(question):
     try:
-        response = openai_client.chat.completions.create(
-            model="gpt-4",  # Change to "gpt-3.5-turbo" if needed
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
             messages=[{"role": "user", "content": question}]
         )
-        return response.choices[0].message.content
+        return response.choices[0].message["content"]
     except Exception as e:
         return f"Error: {e}"
 
