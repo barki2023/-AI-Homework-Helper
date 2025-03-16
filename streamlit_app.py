@@ -1,16 +1,20 @@
 import streamlit as st
-import openai
+import requests
+import os
 
-# Set API Key directly (replace with your actual API key)
-openai.api_key = "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"
+# Load Hugging Face API Key from environment variable
+API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+
 # Function to get AI response
 def get_answer(question):
     try:
-        response = openai.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": question}]
+        headers = {"Authorization": f"Bearer {API_KEY}"}
+        response = requests.post(
+            "https://api-inference.huggingface.co/models/gpt2",
+            headers=headers,
+            json={"inputs": question}
         )
-        return response.choices[0].message.content
+        return response.json()
     except Exception as e:
         return f"Error: {e}"
 
