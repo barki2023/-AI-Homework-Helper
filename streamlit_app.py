@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 import os
 
-# Get API key from environment variable (use a proper variable name)
-API_KEY = os.getenv("HUGGINGFACE_API_KEY")  
+# Get API key from environment variable
+API_KEY = os.getenv("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")  
 
 if not API_KEY:
-    st.error("API key not found. Set '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' in your environment.")
+    st.error("API key not found. Set 'HUGGINGFACE_API_KEY' in your environment.")
 
 # Function to get AI response
 def get_answer(question):
