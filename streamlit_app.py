@@ -3,7 +3,7 @@ import requests
 import os
 
 # Get API key from environment variable
-API_KEY = os.getenv("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")  
+API_KEY = "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"  # Replace with your actual key
 
 if not API_KEY:
     st.error("API key not found. Set 'HUGGINGFACE_API_KEY' in your environment.")
