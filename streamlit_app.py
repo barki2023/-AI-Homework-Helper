@@ -9,7 +9,7 @@ def get_answer(question):
     try:
         headers = {"Authorization": f"Bearer {API_KEY}"}
         response = requests.post(
-            "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",  
+            "https://api-inference.huggingface.co/models/google/flan-t5-large",  
             headers=headers,
             json={"inputs": question}
         )
@@ -21,7 +21,7 @@ def get_answer(question):
             return f"Error: {result['error']}"
         
         # Extract generated text from response
-        return result[0]['summary_text'] if isinstance(result, list) else "No valid response received."
+        return result[0]['generated_text'] if isinstance(result, list) else "No valid response received."
     
     except Exception as e:
         return f"Error: {str(e)}"
