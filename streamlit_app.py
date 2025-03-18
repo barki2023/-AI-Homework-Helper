@@ -8,22 +8,23 @@ def get_answer(question):
     try:
         headers = {"Authorization": f"Bearer {API_KEY}"}
         response = requests.post(
-            "https://api-inference.huggingface.co/models/google/gemini-pro",  
+            "https://api-inference.huggingface.co/models/google/gemma-2b-it",  # ✅ FIXED
             headers=headers,
             json={"inputs": question}
         )
 
+        if response.status_code == 404:
+            return "Error: Model not found. Check the API URL."
         if response.status_code != 200:
             return f"Error: API returned status code {response.status_code}"
 
         result = response.json()
-
         if "error" in result:
             return f"Error: {result['error']}"
 
         return result[0].get('generated_text', "No valid response received.")
 
-    except json.decoder.JSONDecodeError:  # ✅ Fix: Added colon
+    except json.decoder.JSONDecodeError:
         return "Error: Invalid JSON response."
 
 st.title("AI Homework Helper")
