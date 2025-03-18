@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Replace this with your Hugging Face API key
-API_KEY = "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"
+API_KEY = "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"
 
 # Function to get AI response
 def get_answer(question):
