@@ -9,7 +9,7 @@ def get_answer(question):
     try:
         headers = {"Authorization": f"Bearer {API_KEY}"}
         response = requests.post(
-            "https://api-inference.huggingface.co/models/google/flan-t5-large",  
+            "https://api-inference.huggingface.co/models/bigscience/bloomz-560m",  
             headers=headers,
             json={"inputs": question}
         )
